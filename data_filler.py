@@ -26,7 +26,7 @@
 
 import csv as csv
 import sys,os
-from pysqlite2 import dbapi2 as sqlite
+from sqlite3 import dbapi2 as sqlite
 import datetime
 import re
 import platform
@@ -55,7 +55,7 @@ class DatabaseFiller(object):
   def fill(self, rowIds=None):
     """database gets filled here if loaded correctly"""
     if not self.loaded or len(self.rows) <= 0:
-      print "nothing got loaded yet"
+      print("nothing got loaded yet")
       return
 
     # TODO: check if one line has more columns and deal with it
@@ -101,7 +101,7 @@ class DatabaseFiller(object):
     #add columns if it is needed
     for ck in keys:
       if not ck.lower() in keysExisting:
-        print "adding a column: %s" % str(ck)
+        print("adding a column: %s" % str(ck))
         cur.execute("ALTER TABLE dataTable ADD COLUMN %s VARCHAR(50)" % str(ck))
 
     
@@ -117,15 +117,15 @@ class DatabaseFiller(object):
 
       if not ck =='' and not cv == '':      
         if not rowIds or self.newData:
-	  ck=ck[0:len(ck)-1]
-	  cv=cv[0:len(cv)-1]
-	  if platform.system() == "Windows":
-	    cur.execute("INSERT IGNORE INTO dataTable (%s) VALUES(%s)" % (ck,cv))
-	  else:
-	    cur.execute("INSERT OR IGNORE INTO dataTable (%s) VALUES(%s)" % (ck,cv))
-	else:
-	  updatekv=updatekv[0:len(updatekv)-1]
-	  cur.execute("UPDATE dataTable SET %s WHERE %s='%s'" % (updatekv, self.uniqueColumn(), rowIds[i]))
+          ck=ck[0:len(ck)-1]
+          cv=cv[0:len(cv)-1]
+          if platform.system() == "Windows":
+            cur.execute("INSERT IGNORE INTO dataTable (%s) VALUES(%s)" % (ck,cv))
+          else:
+            cur.execute("INSERT OR IGNORE INTO dataTable (%s) VALUES(%s)" % (ck,cv))
+        else:
+          updatekv=updatekv[0:len(updatekv)-1]
+          cur.execute("UPDATE dataTable SET %s WHERE %s='%s'" % (updatekv, self.uniqueColumn(), rowIds[i]))
 
     self.db.commit()
  
@@ -216,9 +216,9 @@ class BackupDatabaseFiller(DatabaseFiller):
     for i,row in enumerate(self.data):
       self.rows.append([])
       for j in xrange(0,len(row)-1,2):
-	ckey = row[j]
-	cv = row[j+1]
-	keyAt = j
+        ckey = row[j]
+        cv = row[j+1]
+        keyAt = j
         cv= cv.replace(',','.')
         if cv != '' and ckey != '':
           self.rows[i].append ([ckey,cv])

@@ -7,7 +7,7 @@
 *   Copyright notice:
 * 
 *   (c) 2011 Stefan Besler (stefan.besler@gmail.com)
-*       2013 Albert Frisch (alebrt.frisch@gmail.com)
+*       2013 Albert Frisch (albert.frisch@gmail.com)
 *
 *   All rights reserved
 *
@@ -68,7 +68,7 @@ def message(s, serious=False):
   if output.count() > 10 and not seriousState:
     output.clear()
   output.addItem(datetime.datetime.now().strftime("%b %d %H:%M:%S: ")+str(s))
-  print datetime.datetime.now().strftime("%b %d %H:%M:%S: ")+str(s)
+  print(datetime.datetime.now().strftime("%b %d %H:%M:%S: ")+str(s))
   seriousState = serious
 #message(s, serious=False)
 
@@ -79,8 +79,8 @@ class PureDataServerWindow(QtGui.QMainWindow, Ui_PureServerMainWindow):
   Qt class which is exactly designed for this propose and the endless loop (Qt internal)
   is of course needed for keeping this programm alive all the time"""
   
-  db=''
-  dbcur=''
+  #db=''
+  #dbcur=''
   path=''
   warned=False
   
@@ -115,7 +115,7 @@ class PureDataServerWindow(QtGui.QMainWindow, Ui_PureServerMainWindow):
   def __initGUI(self):
     global output, seriousState
     output = self.listWidget
-    print self.listWidget
+    print(self.listWidget)
     message("running")    
     QtCore.QObject.connect(self.listWidget, QtCore.SIGNAL('itemSelectionChanged()'),self.connectToDatabase)
     QtCore.QObject.connect(self.mergeButton, QtCore.SIGNAL('clicked()'),self.merge)
@@ -129,7 +129,7 @@ class PureDataServerWindow(QtGui.QMainWindow, Ui_PureServerMainWindow):
     try:
       self.fileMonitor.addPath(self.lastLineFile)
     except:
-      print "'%s' file doesn't exist" % self.lastLineFile
+      print("'%s' file doesn't exist" % self.lastLineFile)
       
 
     #connect to mysql database
@@ -162,8 +162,8 @@ class PureDataServerWindow(QtGui.QMainWindow, Ui_PureServerMainWindow):
     try:        
       self.dbcur.execute("SELECT * FROM dataTable LIMIT 1")
       self.db.commit()
-    except mysql.Error,e:
-      print "Error in keeping connetion alive, reconnecting..."
+    except mysql.Error:
+      print("Error in keeping connetion alive, reconnecting...")
       self.connectToDatabase()
   #dontLooseConnection(self)
    
@@ -242,22 +242,22 @@ class PureDataServerWindow(QtGui.QMainWindow, Ui_PureServerMainWindow):
 
       seriousState = False
       message("Connected to database")
-    except mysql.Error,e:
-      message("Couldn't connect to MySQL server!"+str(e), serious=True)
+    except mysql.Error:
+      message("Couldn't connect to MySQL server!", serious=True)
       message("click here to reconnect", serious=True)
   #connectToDatabase(self)
       
   def prepareConditionWriting(self):
     """ this works only when running as root, generates a table that is used in sql_data_plot.py """
-    if self.db == None:
+    if self.db is None:
       message("No database connection")
       return
 
     try:
       self.dbcur.execute("SELECT * FROM conditionTable LIMIT 1")
-    except mysql.Error,e: 
-      message("(warning) conditionTable does not exist "+str(e))      
-      self.dbcur.execute("CREATE TABLE IF NOT EXISTS conditionTable (id VARCHAR(255) UNIQUE INDEX, Dataset VARCHAR(50) INDEX, Date VARCHAR(50) INDEX, Conditions TEXT, axes VARCHAR(255),fitplugin VARCHAR(255),transformplugin VARCHAR(255),fitparameters VARCHAR(255),transformparameters VARCHAR(255),Temperature VARCHAR(100), Holding VARCHAR(100), Trap VARCHAR(50), Ramping VARCHAR(50), Compressed VARCHAR(50), Calibration VARCHAR(50), Text TEXT)")
+    except mysql.Error: 
+      message("(warning) conditionTable does not exist ")      
+      self.dbcur.execute("CREATE TABLE IF NOT EXISTS conditionTable (id VARCHAR(50) UNIQUE, Dataset VARCHAR(50), Date VARCHAR(50), Conditions TEXT, axes VARCHAR(255),fitplugin VARCHAR(255),transformplugin VARCHAR(255),fitparameters VARCHAR(255),transformparameters VARCHAR(255),Temperature VARCHAR(100), Holding VARCHAR(100), Trap VARCHAR(50), Ramping VARCHAR(50), Compressed VARCHAR(50), Calibration VARCHAR(50), Text TEXT)")
       self.db.commit()
   #prepareConditionWriting(self)
       

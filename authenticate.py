@@ -49,10 +49,9 @@ class AuthenticateDialog(QtGui.QMainWindow, Ui_Dialog):
     
     self.quit=False
     settings = QtCore.QSettings("LevT","Authentication")
-    self.hostEdit.setText(settings.value("Host").toString())
-    self.userEdit.setText(settings.value("User").toString())
-    self.passwordEdit.setText(settings.value("Pwd").toString())
-  #__init__(self, parent = None)
+    self.hostEdit.setText(settings.value("Host"))
+    self.userEdit.setText(settings.value("User"))
+    self.passwordEdit.setText(settings.value("Pwd"))
     
   def reject(self):
     self.quit=True
