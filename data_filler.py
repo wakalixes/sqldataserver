@@ -79,7 +79,7 @@ class DatabaseFiller(object):
 
     columnNamesStr = columnNamesStr[0:len(columnNamesStr)-1]
     # print "CREATE TABLE IF NOT EXISTS dataTable ("+ columnNamesStr+")"
-    cur.execute("CREATE TABLE IF NOT EXISTS dataTable (id VARCHAR(255), Dataset VARCHAR(50), Date VARCHAR(50), PRIMARY KEY (id), UNIQUE (id), INDEX (Dataset), INDEX (Date));") #("+ columnNamesStr+");")
+    cur.execute("CREATE TABLE IF NOT EXISTS dataTable (id VARCHAR(255), Dataset VARCHAR(100), Date VARCHAR(50), PRIMARY KEY (id), UNIQUE (id), INDEX (Dataset), INDEX (Date));") #("+ columnNamesStr+");")
     #cur.execute("ALTER TABLE dataTable ADD PRIMARY KEY (id), ADD UNIQUE (id);")
     #cur.execute("ALTER TABLE dataTable ADD INDEX(Dataset), ADD INDEX(Date);")
     self.db.commit()
