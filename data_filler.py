@@ -50,7 +50,7 @@ class DatabaseFiller(object):
 
   def uniqueColumn(self):
     """return the unique name of the tables unique column"""
-    pass
+    return "id"
   
   def fill(self, rowIds=None):
     """database gets filled here if loaded correctly"""
@@ -71,7 +71,7 @@ class DatabaseFiller(object):
       
     for k,v in self.rows[0]:
       if k==self.uniqueColumn():
-        columnNamesStr += k.replace(" ","_")+" VARCHAR(255) PRIMARY KEY UNIQUE,"
+        columnNamesStr += k.replace(" ","_")+" VARCHAR(255),"
       else:
         columnNamesStr += k.replace(" ","_")+" VARCHAR(50),"
 	  
@@ -79,7 +79,9 @@ class DatabaseFiller(object):
 
     columnNamesStr = columnNamesStr[0:len(columnNamesStr)-1]
     # print "CREATE TABLE IF NOT EXISTS dataTable ("+ columnNamesStr+")"
-    cur.execute("CREATE TABLE IF NOT EXISTS dataTable ("+ columnNamesStr+")")
+    cur.execute("CREATE TABLE IF NOT EXISTS dataTable (id VARCHAR(255), Dataset VARCHAR(50), Date VARCHAR(50), PRIMARY KEY (id), UNIQUE (id), INDEX (Dataset), INDEX (Date));") #("+ columnNamesStr+");")
+    #cur.execute("ALTER TABLE dataTable ADD PRIMARY KEY (id), ADD UNIQUE (id);")
+    #cur.execute("ALTER TABLE dataTable ADD INDEX(Dataset), ADD INDEX(Date);")
     self.db.commit()
     # end if create dataTable if it does not exists
 
@@ -122,7 +124,7 @@ class DatabaseFiller(object):
 	  if platform.system() == "Windows":
 	    cur.execute("INSERT IGNORE INTO dataTable (%s) VALUES(%s)" % (ck,cv))
 	  else:
-	    cur.execute("INSERT OR IGNORE INTO dataTable (%s) VALUES(%s)" % (ck,cv))
+	    cur.execute("INSERT IGNORE INTO dataTable (%s) VALUES(%s)" % (ck,cv))
 	else:
 	  updatekv=updatekv[0:len(updatekv)-1]
 	  cur.execute("UPDATE dataTable SET %s WHERE %s='%s'" % (updatekv, self.uniqueColumn(), rowIds[i]))
