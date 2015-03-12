@@ -64,7 +64,7 @@ class AuthenticateDialog(QtGui.QMainWindow, Ui_Dialog):
   #reject(self)
     
   def accept(self):
-    self.host=self.userEdit.text()
+    self.host=self.hostEdit.text()
     self.user=self.userEdit.text()
     self.pwd=self.passwordEdit.text()
     self.parent.setEnabled(True)
