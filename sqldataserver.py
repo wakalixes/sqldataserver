@@ -257,7 +257,9 @@ class PureDataServerWindow(QtGui.QMainWindow, Ui_PureServerMainWindow):
       self.dbcur.execute("SELECT * FROM conditionTable LIMIT 1")
     except mysql.Error: 
       message("(warning) conditionTable does not exist ")      
-      self.dbcur.execute("CREATE TABLE IF NOT EXISTS conditionTable (id VARCHAR(50) UNIQUE, Dataset VARCHAR(50), Date VARCHAR(50), Conditions TEXT, axes VARCHAR(255),fitplugin VARCHAR(255),transformplugin VARCHAR(255),fitparameters VARCHAR(255),transformparameters VARCHAR(255),Temperature VARCHAR(100), Holding VARCHAR(100), Trap VARCHAR(50), Ramping VARCHAR(50), Compressed VARCHAR(50), Calibration VARCHAR(50), Text TEXT)")
+      self.dbcur.execute("CREATE TABLE IF NOT EXISTS conditionTable (id VARCHAR(255), Dataset VARCHAR(100), Date VARCHAR(50), Conditions TEXT, axes VARCHAR(255), fitplugin VARCHAR(255), transformplugin VARCHAR(255), fitparameters VARCHAR(255), transformparameters VARCHAR(255), Temperature VARCHAR(100), Holding VARCHAR(100), Trap VARCHAR(50), Ramping VARCHAR(50), Compressed VARCHAR(50), Calibration VARCHAR(50), Text TEXT);")
+      self.dbcur.execute("ALTER TABLE conditionTable ADD PRIMARY KEY (id), ADD UNIQUE (id);")
+      self.dbcur.execute("ALTER TABLE conditionTable ADD INDEX(Dataset), ADD INDEX(Date);")
       self.db.commit()
   #prepareConditionWriting(self)
       
